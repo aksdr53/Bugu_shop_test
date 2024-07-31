@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import PermissionDenied
 from .models import Article, User
 from .serializers import ArticleSerializer, RegisterSerializer, UserSerializer
 
@@ -33,6 +34,7 @@ class PrivateArticleListView(generics.ListAPIView):
 
 class ArticleCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ArticleSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -45,10 +47,8 @@ class ArticleCreateView(generics.CreateAPIView):
 class ArticleUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
-    def get_permissions(self):
-        article = self.get_object()
-        if article.author != self.request.user:
-            self.permission_denied(self.request)
-        return super().get_permissions()
+    def check_object_permissions(self, request, obj):
+        super().check_object_permissions(request, obj)
+        if obj.author != request.user:
+            raise PermissionDenied("You do not have permission to edit or delete this article.")

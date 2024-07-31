@@ -27,3 +27,4 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ['id', 'title', 'content', 'is_public', 'author']
+        read_only_fields = ['author']
