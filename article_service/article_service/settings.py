@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-u6ik1o9ts0bo7ds7t(na(17@i6+ohi(5^+k8_oj6-4uf&_(#ry
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['etonorm.ru', '127.0.0.1']
 
 
 # Application definition
@@ -129,6 +129,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -145,3 +146,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
+CSRF_TRUSTED_ORIGINS = ['http://etonorm.ru']
